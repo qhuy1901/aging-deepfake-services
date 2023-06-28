@@ -1,0 +1,11 @@
+Flask
+gunicorn
+numpy
+torch
+matplotlib
+torchvision
+imageio
+storage
+mtcnn
+opencv-python
+replicate
