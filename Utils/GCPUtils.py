@@ -22,7 +22,7 @@ class GCPUtils:
         return blob.public_url
     
 
-    def save_portrait_to_gcs(portrait):
+    def save_portrait_to_gcs(self, portrait):
         # Create a client instance for GCS
         client = storage.Client.from_service_account_json('credentials.json')
 

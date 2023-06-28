@@ -1,18 +1,18 @@
 ### Copyright (C) 2020 Roy Or-El. All rights reserved.
 ### Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode).
 import os
-import torch
-from flask import Flask, request, jsonify, send_file
-import imageio
+from flask import Flask, request, jsonify
 import cv2
 from datetime import datetime
 from mtcnn import MTCNN
-from PIL import Image
 import replicate
 from io import BytesIO
 import numpy as np
 from Utils.VideoAgingUtils import VideoAgingUtils
 from Utils.GCPUtils import GCPUtils
+import urllib.request
+import requests
+from io import BytesIO
 
 #Set the REPLICATE_API_TOKEN environment variable
 os.environ["REPLICATE_API_TOKEN"] =  "r8_W9eZaZk2Xdikeun3JeH0GZC97kLuZyY16Kkob"
@@ -178,7 +178,7 @@ def aging_video():
     # Đọc video từ file tạm thời
     temp_filename = 'video/temp_video.mp4'
     video_file.save(temp_filename)
-    
+
     fps = 30
     output_video_path = "video/output_video.mp4"
 
@@ -197,10 +197,25 @@ def aging_video():
 
     # Đọc ảnh khuôn mặt
     # face = cv2.imread(face_path)
-    aged_image = request.files['aged_image']
-    face_data = aged_image.read()
-    nparr = np.fromstring(face_data, np.uint8)
+    aged_image_url = request.form['aged_image_url']
+
+    # Send a GET request to the image URL
+    response = requests.get(aged_image_url)
+
+    # Read the image data from the response content
+    image_data = response.content
+
+    # Convert the image data into a NumPy array
+    nparr = np.frombuffer(image_data, np.uint8)
+
+    # Decode the image using OpenCV
     face = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+
+    # # Download the image from the URL
+    # urllib.request.urlretrieve(aged_image_url, 'temp_aged_image.jpg')
+    # # face_data = aged_image.read()
+    # # nparr = np.fromstring(face_data, np.uint8)
+    # face = cv2.imread('temp_aged_image.jpg')
 
     count = 0
 
