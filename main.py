@@ -11,8 +11,8 @@ from PIL import Image
 import replicate
 from io import BytesIO
 import numpy as np
-from VideoAgingUtils import VideoAgingUtils
-from GCPUtils import GCPUtils
+from Utils.VideoAgingUtils import VideoAgingUtils
+from Utils.GCPUtils import GCPUtils
 
 #Set the REPLICATE_API_TOKEN environment variable
 os.environ["REPLICATE_API_TOKEN"] =  "r8_W9eZaZk2Xdikeun3JeH0GZC97kLuZyY16Kkob"
@@ -176,10 +176,11 @@ def aging_video():
         return "Invalid file", 400
 
     # Đọc video từ file tạm thời
-    temp_filename = 'temp_video.mp4'
+    temp_filename = 'video/temp_video.mp4'
     video_file.save(temp_filename)
+    
     fps = 30
-    output_video_path = "output_video.mp4"
+    output_video_path = "video/output_video.mp4"
 
     # Open the video stream using cv2.VideoCapture
     video = cv2.VideoCapture(temp_filename)

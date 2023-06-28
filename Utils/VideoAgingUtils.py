@@ -5,7 +5,7 @@ from datetime import datetime
 
 # Loading models and predictors of the dlib library to detect landmarks in both faces
 detector = dlib.get_frontal_face_detector()
-predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
+predictor = dlib.shape_predictor("./models/shape_predictor_68_face_landmarks.dat")
 fps = 30
 
 class VideoAgingUtils:
