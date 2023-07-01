@@ -65,7 +65,35 @@ def predict_using_sam_model_with_target_age():
     print("[END] Predict with SAM model with target age")
     return jsonify(data)
 
+@app.route('/predict-using-sam-model-with-target-age-and-image-url', methods=['POST'])
+def predict_using_sam_model_with_target_age_and_image_url():
+    print("[START] Predict with SAM model with target age and image url")
+    try:
+        target_age = request.form['targetAge']
+        print('Target age = ' + target_age)
+    except (KeyError, ValueError, TypeError):
+        # Handle the case when the parameter is missing or not a valid integer
+        return "Invalid parameter: 'targetAge' must be provided as an integer", 400
 
+    image_url = request.form['imageUrl']
+
+    # Tải hình ảnh từ URL
+    response = requests.get(image_url)
+    if response.status_code != 200:
+        return "Failed to fetch image from the provided URL", 400
+
+    image_data = response.content
+
+    output = replicate.run(
+        "yuval-alaluf/sam:9222a21c181b707209ef12b5e0d7e94c994b58f01c7b2fec075d2e892362f13c",
+        input={"image": BytesIO(image_data), "target_age": str(target_age)}
+    )
+
+    data = {
+        'outputFilePath': output
+    }
+    print("[END] Predict with SAM model with target age and image url")
+    return jsonify(data)
 
 @app.route('/extract-portrait', methods=['POST'])
 def extract_portrait():
