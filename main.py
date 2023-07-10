@@ -15,7 +15,7 @@ import requests
 from io import BytesIO
 
 #Set the REPLICATE_API_TOKEN environment variable
-os.environ["REPLICATE_API_TOKEN"] =  "r8_W9eZaZk2Xdikeun3JeH0GZC97kLuZyY16Kkob"
+os.environ["REPLICATE_API_TOKEN"] =  "r8_1o2rN7TpedW0OlCkQFCwba7VRvFCRUj2JzexX"
 
 app = Flask(__name__)
 
@@ -239,16 +239,11 @@ def aging_video():
     # Decode the image using OpenCV
     face = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
-    # # Download the image from the URL
-    # urllib.request.urlretrieve(aged_image_url, 'temp_aged_image.jpg')
-    # # face_data = aged_image.read()
-    # # nparr = np.fromstring(face_data, np.uint8)
-    # face = cv2.imread('temp_aged_image.jpg')
-
     count = 0
+    frame_threshold = frame_count - 3
 
     # Trích xuất các khung hình
-    while success:
+    while success and (count != frame_threshold):
         count += 1
         print(f"[Aging] Frame {count}/{frame_count}")
         try:
@@ -260,8 +255,8 @@ def aging_video():
 
             video_writer.write(swap_face_image)
         except Exception as e:
-            # Handling other exceptions
             print("An error occurred:", str(e))
+            continue
 
     output_gcp_path = GCPUtils().upload_video(output_video_path)
     
@@ -275,5 +270,5 @@ def aging_video():
     print("[END] Aging Video")
     return jsonify(data)
     
-if __name__ == '__main__':
-    app.run()
+if __name__ == "__main__":
+    app.run(debug=True)

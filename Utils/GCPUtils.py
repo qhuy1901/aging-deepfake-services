@@ -7,7 +7,7 @@ class GCPUtils:
         client = storage.Client.from_service_account_json('credentials.json')
 
         # Set the name of the bucket and the path to the file to upload
-        bucket_name = 'aging-output'
+        bucket_name = 'aging-image-video-storage'
 
         current_time = datetime.now()
         time_string = current_time.strftime("%Y-%m-%d %H:%M:%S")
@@ -56,7 +56,7 @@ class GCPUtils:
         client = storage.Client.from_service_account_json('credentials.json')
 
         # Get the bucket object
-        bucket = client.bucket('aging-output')
+        bucket = client.bucket('aging-image-video-storage')
 
         current_time = datetime.datetime.now()
         time_string = current_time.strftime("%Y-%m-%d %H:%M:%S")
